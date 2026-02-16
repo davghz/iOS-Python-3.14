@@ -1,0 +1,20 @@
+diff --git a/Lib/_scproxy.py b/Lib/_scproxy.py
+new file mode 100644
+index 0000000..3f02db2
+--- /dev/null
++++ b/Lib/_scproxy.py
+@@ -0,0 +1,14 @@
++"""iOS compatibility stub for Darwin _scproxy module.
++
++The real _scproxy extension is macOS-specific. On jailbroken iOS we don't
++have SystemConfiguration proxy APIs exposed the same way, but urllib/pip only
++need these calls to exist.
++"""
++
++
++def _get_proxy_settings():
++    return {}
++
++
++def _get_proxies():
++    return {}

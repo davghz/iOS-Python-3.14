@@ -1,33 +1,31 @@
-# Upstream Source Code
+# Python Source Mods
 
-This directory ships the upstream source inputs used to build this package so
-others can reproduce the iOS build.
+This directory tracks the Python source changes used for the iOS build.
 
-## Included archives
+## What is in git
 
-- `upstream/Python-3.14.3.tgz` (CPython source)
-- `upstream/pip-26.0.1.tar.gz` (pip source)
+- `patches/python3.14/*.patch`: patchset applied on top of CPython 3.14.3
+- `modified/python3.14/`: direct copy of modified source files
+- `fetch-sources.sh`: fetches upstream CPython/pip archives
+- `apply-python-patches.sh`: recreates a patched CPython tree
+- `SHA256SUMS`: checksums for the fetched upstream archives
 
-Verify integrity:
+Upstream archives are fetched into `sources/upstream/` but are not required to
+be committed to git.
+
+## Recreate patched CPython source
+
+```sh
+./fetch-sources.sh
+./apply-python-patches.sh
+```
+
+Patched source output path:
+
+- `sources/work/Python-3.14.3`
+
+## Verify fetched archives
 
 ```sh
 shasum -a 256 -c SHA256SUMS
 ```
-
-Extract examples:
-
-```sh
-tar -xzf upstream/Python-3.14.3.tgz
-tar -xzf upstream/pip-26.0.1.tar.gz
-```
-
-## Refresh sources
-
-Run:
-
-```sh
-./fetch-sources.sh
-```
-
-That script downloads fresh copies from official URLs and rewrites
-`SHA256SUMS`.
