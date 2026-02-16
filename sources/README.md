@@ -9,6 +9,8 @@ This directory tracks the Python source changes used for the iOS build.
 - `fetch-sources.sh`: fetches upstream CPython/pip archives
 - `apply-python-patches.sh`: recreates a patched CPython tree
 - `build-ios-openssl-modules.sh`: builds `_ssl` and `_hashlib` for iOS
+- `build-ios-optional-modules.sh`: builds `_ctypes`, `_lzma`, `readline`, `_curses`, `_curses_panel` for iOS
+- `stage-libtest.sh`: stages `Lib/test` into package layout
 - `SHA256SUMS`: checksums for the fetched upstream archives
 
 Upstream archives are fetched into `sources/upstream/` but are not required to
@@ -40,6 +42,30 @@ This builds and stages:
 
 - `layout/usr/local/python3.14/lib/python3.14/lib-dynload/_ssl.cpython-314-arm64-iphoneos.so`
 - `layout/usr/local/python3.14/lib/python3.14/lib-dynload/_hashlib.cpython-314-arm64-iphoneos.so`
+
+## Build iOS optional extension modules
+
+```sh
+TARGET_PASS=alpine ./build-ios-optional-modules.sh
+```
+
+This builds and stages:
+
+- `layout/usr/local/python3.14/lib/python3.14/lib-dynload/_ctypes.cpython-314-arm64-iphoneos.so`
+- `layout/usr/local/python3.14/lib/python3.14/lib-dynload/_lzma.cpython-314-arm64-iphoneos.so`
+- `layout/usr/local/python3.14/lib/python3.14/lib-dynload/readline.cpython-314-arm64-iphoneos.so`
+- `layout/usr/local/python3.14/lib/python3.14/lib-dynload/_curses.cpython-314-arm64-iphoneos.so`
+- `layout/usr/local/python3.14/lib/python3.14/lib-dynload/_curses_panel.cpython-314-arm64-iphoneos.so`
+
+## Stage Lib/test for regrtest support
+
+```sh
+./stage-libtest.sh
+```
+
+This stages:
+
+- `layout/usr/local/python3.14/lib/python3.14/test/`
 
 ## Verify fetched archives
 

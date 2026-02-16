@@ -1,8 +1,8 @@
 Package: com.davgz.python314
 Name: Python 3.14 for iOS
-Version: 3.14.3-5
+Version: 3.14.3-6
 Architecture: iphoneos-arm
 Depends: firmware (>= 13.0), libssl1.1.1
 Maintainer: davgz
 Section: Languages
-Description: CPython 3.14.3 with pip 26.0.1 for jailbroken iOS devices.
+Description: CPython 3.14.3 with pip 26.0.1 for jailbroken iOS devices (with ssl/ctypes/lzma/readline/curses modules).

@@ -9,7 +9,8 @@ This repo builds a Theos `.deb` for CPython 3.14 on jailbroken iOS.
 - Install prefix: `/usr/local/python3.14`
 - Source patchset for CPython rebuilds: `sources/patches/python3.14/`
 - Source docs/scripts/checksums: `sources/README.md`, `sources/*.sh`, `sources/SHA256SUMS`
-- iOS OpenSSL extension modules: `_ssl` and `_hashlib`
+- iOS extension modules: `_ssl`, `_hashlib`, `_ctypes`, `_lzma`, `readline`, `_curses`, `_curses_panel`
+- `Lib/test` test suite so `python3.14 -m test ...` works on-device
 
 ## iOS-specific fixes in this repo
 
@@ -19,6 +20,12 @@ This repo builds a Theos `.deb` for CPython 3.14 on jailbroken iOS.
 - iOS OpenSSL modules (`layout/.../lib-dynload/_ssl*.so`, `layout/.../lib-dynload/_hashlib*.so`)
   - Built using `sources/build-ios-openssl-modules.sh`.
   - Uses non-deprecated iOS linking (`-bundle_loader`) instead of `dynamic_lookup`.
+- Optional extension modules (`_ctypes`, `_lzma`, `readline`, `_curses`, `_curses_panel`)
+  - Built using `sources/build-ios-optional-modules.sh`.
+  - Uses non-deprecated iOS linking (`-bundle_loader`) for all module links.
+- `Lib/test` packaging
+  - Staged using `sources/stage-libtest.sh`.
+  - Enables `python3.14 -m test` instead of failing with missing `test` package.
 - Global CA bundle wiring (`overlay/etc/profile.d/python314-ca.sh`, `.../sitecustomize.py`)
   - Sets `SSL_CERT_FILE` to the packaged certifi CA bundle by default.
   - Makes default Python HTTPS verification work without manual SSL context setup.
@@ -31,6 +38,9 @@ This repo builds a Theos `.deb` for CPython 3.14 on jailbroken iOS.
 From this directory:
 
 ```sh
+TARGET_PASS=alpine ./sources/build-ios-openssl-modules.sh
+TARGET_PASS=alpine ./sources/build-ios-optional-modules.sh
+./sources/stage-libtest.sh
 make package FINALPACKAGE=1
 ```
 
@@ -39,6 +49,7 @@ Output package path:
 - `packages/com.davgz.python314_3.14.3-3_iphoneos-arm.deb`
 - `packages/com.davgz.python314_3.14.3-4_iphoneos-arm.deb`
 - `packages/com.davgz.python314_3.14.3-5_iphoneos-arm.deb`
+- `packages/com.davgz.python314_3.14.3-6_iphoneos-arm.deb`
 
 ## Install on device with Theos
 
@@ -69,7 +80,16 @@ Use exit codes (or file-based checks) for verification:
 /usr/local/python3.14/bin/python3.14 -c "import pip; open('/tmp/pipver','w').write(pip.__version__)" && cat /tmp/pipver
 ```
 
-Expected after install: both commands exit `0`.
+Expected after install: commands exit `0`, including:
+
+```sh
+/usr/local/python3.14/bin/python3.14 -m pip debug --verbose; echo $?
+/usr/local/python3.14/bin/python3.14 - <<'PY'
+import ctypes, lzma, readline, curses
+print("optional modules ok")
+PY
+/usr/local/python3.14/bin/python3.14 -m test -h; echo $?
+```
 
 ## Source code for others
 
@@ -83,3 +103,8 @@ upstream and materialize a patched tree for rebuilds.
 
 Use `sources/build-ios-openssl-modules.sh` to rebuild and stage the `_ssl` and
 `_hashlib` extension modules for iOS.
+
+Use `sources/build-ios-optional-modules.sh` to rebuild and stage `_ctypes`,
+`_lzma`, `readline`, `_curses`, and `_curses_panel`.
+
+Use `sources/stage-libtest.sh` to stage `Lib/test` into the package payload.
