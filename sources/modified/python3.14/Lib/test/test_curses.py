@@ -3,6 +3,7 @@ import inspect
 import os
 import string
 import sys
+import sysconfig
 import tempfile
 import unittest
 from unittest.mock import MagicMock
@@ -12,13 +13,19 @@ from test.support import (requires, verbose, SaveSignals, cpython_only,
                           gc_collect)
 from test.support.import_helper import import_module
 
-# iOS SSH sessions commonly run without a controlling TTY; curses tests should
-# skip rather than fail in this environment.
-if sys.platform == "ios":
+def _is_iphoneos_build():
+    soabi = sysconfig.get_config_var("SOABI") or ""
+    multiarch = sysconfig.get_config_var("MULTIARCH") or ""
+    return "iphoneos" in soabi or "iphoneos" in multiarch
+
+
+# iPhoneOS SSH sessions commonly run without a controlling TTY; curses tests
+# should skip rather than fail in this environment.
+if _is_iphoneos_build():
     stdin_tty = bool(getattr(sys, "__stdin__", None) and sys.__stdin__.isatty())
     stdout_tty = bool(getattr(sys, "__stdout__", None) and sys.__stdout__.isatty())
     if not (stdin_tty and stdout_tty):
-        raise unittest.SkipTest("curses tests require interactive TTY on iOS")
+        raise unittest.SkipTest("curses tests require interactive TTY on iPhoneOS")
 
 # Optionally test curses module.  This currently requires that the
 # 'curses' resource be given on the regrtest command line using the -u

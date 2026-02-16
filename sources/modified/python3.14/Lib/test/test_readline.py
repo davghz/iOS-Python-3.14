@@ -5,6 +5,7 @@ import codecs
 import locale
 import os
 import sys
+import sysconfig
 import tempfile
 import textwrap
 import threading
@@ -26,13 +27,19 @@ if hasattr(readline, "_READLINE_LIBRARY_VERSION"):
 else:
     is_editline = readline.backend == "editline"
 
-# iOS SSH sessions are frequently non-interactive (no controlling TTY), which
-# makes PTY-driven readline tests unreliable or hanging.
-if sys.platform == "ios":
+def _is_iphoneos_build():
+    soabi = sysconfig.get_config_var("SOABI") or ""
+    multiarch = sysconfig.get_config_var("MULTIARCH") or ""
+    return "iphoneos" in soabi or "iphoneos" in multiarch
+
+
+# iPhoneOS SSH sessions are frequently non-interactive (no controlling TTY),
+# which makes PTY-driven readline tests unreliable or hanging.
+if _is_iphoneos_build():
     stdin_tty = bool(getattr(sys, "__stdin__", None) and sys.__stdin__.isatty())
     stdout_tty = bool(getattr(sys, "__stdout__", None) and sys.__stdout__.isatty())
     if not (stdin_tty and stdout_tty):
-        raise unittest.SkipTest("readline tests require interactive TTY on iOS")
+        raise unittest.SkipTest("readline tests require interactive TTY on iPhoneOS")
 
 
 def setUpModule():

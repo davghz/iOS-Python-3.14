@@ -27,7 +27,8 @@ This repo builds a Theos `.deb` for CPython 3.14 on jailbroken iOS.
 - `Lib/test` packaging
   - Staged using `sources/stage-libtest.sh`.
   - Enables `python3.14 -m test` instead of failing with missing `test` package.
-  - Includes iOS patch to skip `test_readline`/`test_curses` in non-interactive SSH sessions.
+  - Includes iPhoneOS patches to skip `test_readline`/`test_curses` in non-interactive SSH sessions.
+  - Includes iPhoneOS skips for unstable ctypes callback tests that can bus-error with platform libffi.
 - Global CA bundle wiring (`overlay/etc/profile.d/python314-ca.sh`, `.../sitecustomize.py`)
   - Sets `SSL_CERT_FILE` to the packaged certifi CA bundle by default.
   - Makes default Python HTTPS verification work without manual SSL context setup.
@@ -53,6 +54,8 @@ Output package path:
 - `packages/com.davgz.python314_3.14.3-5_iphoneos-arm.deb`
 - `packages/com.davgz.python314_3.14.3-6_iphoneos-arm.deb`
 - `packages/com.davgz.python314_3.14.3-7_iphoneos-arm.deb`
+- `packages/com.davgz.python314_3.14.3-8_iphoneos-arm.deb`
+- `packages/com.davgz.python314_3.14.3-9_iphoneos-arm.deb`
 
 ## Install on device with Theos
 

@@ -20,7 +20,8 @@ Current Python patchset includes:
 
 - `_scproxy` stub for iOS compatibility (pip/urllib startup path)
 - `sitecustomize.py` CA-bundle wiring for default HTTPS verification
-- iOS non-interactive TTY skips for `Lib/test/test_readline.py` and `Lib/test/test_curses.py`
+- iPhoneOS non-interactive TTY skips for `Lib/test/test_readline.py` and `Lib/test/test_curses.py`
+- iPhoneOS skips for unstable ctypes callback tests in `Lib/test/test_ctypes`
 
 ## Recreate patched CPython source
 

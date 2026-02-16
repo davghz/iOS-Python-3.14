@@ -1,34 +1,63 @@
---- a/Lib/test/test_curses.py
-+++ b/Lib/test/test_curses.py
-@@ -11,6 +11,14 @@ from test.support import (requires, verbose, SaveSignals, cpython_only,
-                           check_disallow_instantiation, MISSING_C_DOCSTRINGS,
+--- a/Lib/test/test_curses.py	2026-02-03 07:32:20
++++ b/Lib/test/test_curses.py	2026-02-16 03:06:03
+@@ -3,6 +3,7 @@
+ import os
+ import string
+ import sys
++import sysconfig
+ import tempfile
+ import unittest
+ from unittest.mock import MagicMock
+@@ -12,6 +13,20 @@
                            gc_collect)
  from test.support.import_helper import import_module
+ 
++def _is_iphoneos_build():
++    soabi = sysconfig.get_config_var("SOABI") or ""
++    multiarch = sysconfig.get_config_var("MULTIARCH") or ""
++    return "iphoneos" in soabi or "iphoneos" in multiarch
 +
-+# iOS SSH sessions commonly run without a controlling TTY; curses tests should
-+# skip rather than fail in this environment.
-+if sys.platform == "ios":
++
++# iPhoneOS SSH sessions commonly run without a controlling TTY; curses tests
++# should skip rather than fail in this environment.
++if _is_iphoneos_build():
 +    stdin_tty = bool(getattr(sys, "__stdin__", None) and sys.__stdin__.isatty())
 +    stdout_tty = bool(getattr(sys, "__stdout__", None) and sys.__stdout__.isatty())
 +    if not (stdin_tty and stdout_tty):
-+        raise unittest.SkipTest("curses tests require interactive TTY on iOS")
- 
++        raise unittest.SkipTest("curses tests require interactive TTY on iPhoneOS")
++
  # Optionally test curses module.  This currently requires that the
  # 'curses' resource be given on the regrtest command line using the -u
---- a/Lib/test/test_readline.py
-+++ b/Lib/test/test_readline.py
-@@ -25,6 +25,14 @@ if hasattr(readline, "_READLINE_LIBRARY_VERSION"):
-     is_editline = ("EditLine wrapper" in readline._READLINE_LIBRARY_VERSION)
+ # option.  If not available, nothing after this line will be executed.
+--- a/Lib/test/test_readline.py	2026-02-03 07:32:20
++++ b/Lib/test/test_readline.py	2026-02-16 03:06:03
+@@ -5,6 +5,7 @@
+ import locale
+ import os
+ import sys
++import sysconfig
+ import tempfile
+ import textwrap
+ import threading
+@@ -26,7 +27,21 @@
  else:
      is_editline = readline.backend == "editline"
+ 
++def _is_iphoneos_build():
++    soabi = sysconfig.get_config_var("SOABI") or ""
++    multiarch = sysconfig.get_config_var("MULTIARCH") or ""
++    return "iphoneos" in soabi or "iphoneos" in multiarch
+ 
 +
-+# iOS SSH sessions are frequently non-interactive (no controlling TTY), which
-+# makes PTY-driven readline tests unreliable or hanging.
-+if sys.platform == "ios":
++# iPhoneOS SSH sessions are frequently non-interactive (no controlling TTY),
++# which makes PTY-driven readline tests unreliable or hanging.
++if _is_iphoneos_build():
 +    stdin_tty = bool(getattr(sys, "__stdin__", None) and sys.__stdin__.isatty())
 +    stdout_tty = bool(getattr(sys, "__stdout__", None) and sys.__stdout__.isatty())
 +    if not (stdin_tty and stdout_tty):
-+        raise unittest.SkipTest("readline tests require interactive TTY on iOS")
- 
- 
++        raise unittest.SkipTest("readline tests require interactive TTY on iPhoneOS")
++
++
  def setUpModule():
+     if verbose:
+         # Python implementations other than CPython may not have
