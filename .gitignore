@@ -1,5 +1,5 @@
 .theos/
 layout/
 packages/*
-!packages/com.davgz.python314_3.14.3-2_iphoneos-arm.deb
+!packages/com.davgz.python314_3.14.3-3_iphoneos-arm.deb
 !packages/SHA256SUMS

@@ -13,7 +13,7 @@ sign_if_macho() {
         return 0
     fi
 
-    if /usr/bin/file "$path" 2>/dev/null | /usr/bin/grep -q 'Mach-O'; then
+    if /usr/bin/file "$path" 2>/dev/null | /bin/grep -q 'Mach-O'; then
         /usr/bin/ldid -S "$path" || true
     fi
 }

@@ -7,6 +7,8 @@ This repo builds a Theos `.deb` for CPython 3.14 on jailbroken iOS.
 - CPython `3.14.3`
 - `pip 26.0.1`
 - Install prefix: `/usr/local/python3.14`
+- Source bundles for rebuilds: `sources/upstream/`
+- Source documentation/checksums: `sources/README.md`, `sources/SHA256SUMS`
 
 ## iOS-specific fixes in this repo
 
@@ -26,7 +28,7 @@ make package FINALPACKAGE=1
 
 Output package path:
 
-- `packages/com.davgz.python314_3.14.3-2_iphoneos-arm.deb`
+- `packages/com.davgz.python314_3.14.3-3_iphoneos-arm.deb`
 
 ## Install on device with Theos
 
@@ -54,6 +56,16 @@ Use exit codes (or file-based checks) for verification:
 ```sh
 /usr/local/python3.14/bin/python3.14 -V; echo $?
 /usr/local/python3.14/bin/pip --version; echo $?
+/usr/local/python3.14/bin/python3.14 -c "import pip; open('/tmp/pipver','w').write(pip.__version__)" && cat /tmp/pipver
 ```
 
 Expected after install: both commands exit `0`.
+
+## Upstream source code for others
+
+This repository includes the upstream source archives used for this package:
+
+- `sources/upstream/Python-3.14.3.tgz`
+- `sources/upstream/pip-26.0.1.tar.gz`
+
+See `sources/README.md` for extraction and refresh instructions.
