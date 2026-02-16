@@ -19,6 +19,9 @@ This repo builds a Theos `.deb` for CPython 3.14 on jailbroken iOS.
 - iOS OpenSSL modules (`layout/.../lib-dynload/_ssl*.so`, `layout/.../lib-dynload/_hashlib*.so`)
   - Built using `sources/build-ios-openssl-modules.sh`.
   - Uses non-deprecated iOS linking (`-bundle_loader`) instead of `dynamic_lookup`.
+- Global CA bundle wiring (`overlay/etc/profile.d/python314-ca.sh`, `.../sitecustomize.py`)
+  - Sets `SSL_CERT_FILE` to the packaged certifi CA bundle by default.
+  - Makes default Python HTTPS verification work without manual SSL context setup.
 - `postinst` ad-hoc signing (`overlay/DEBIAN/postinst`)
   - Signs Mach-O files in Python `bin/` and `lib-dynload/` using `ldid -S` after install.
   - Prevents immediate process kills from unsigned binaries/modules.
@@ -35,6 +38,7 @@ Output package path:
 
 - `packages/com.davgz.python314_3.14.3-3_iphoneos-arm.deb`
 - `packages/com.davgz.python314_3.14.3-4_iphoneos-arm.deb`
+- `packages/com.davgz.python314_3.14.3-5_iphoneos-arm.deb`
 
 ## Install on device with Theos
 

@@ -14,6 +14,11 @@ This directory tracks the Python source changes used for the iOS build.
 Upstream archives are fetched into `sources/upstream/` but are not required to
 be committed to git.
 
+Current Python patchset includes:
+
+- `_scproxy` stub for iOS compatibility (pip/urllib startup path)
+- `sitecustomize.py` CA-bundle wiring for default HTTPS verification
+
 ## Recreate patched CPython source
 
 ```sh
