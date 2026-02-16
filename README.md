@@ -23,9 +23,11 @@ This repo builds a Theos `.deb` for CPython 3.14 on jailbroken iOS.
 - Optional extension modules (`_ctypes`, `_lzma`, `readline`, `_curses`, `_curses_panel`)
   - Built using `sources/build-ios-optional-modules.sh`.
   - Uses non-deprecated iOS linking (`-bundle_loader`) for all module links.
+  - Builds `_ctypes` with Apple libffi closure/cif feature flags to avoid iOS callback-path crashes.
 - `Lib/test` packaging
   - Staged using `sources/stage-libtest.sh`.
   - Enables `python3.14 -m test` instead of failing with missing `test` package.
+  - Includes iOS patch to skip `test_readline`/`test_curses` in non-interactive SSH sessions.
 - Global CA bundle wiring (`overlay/etc/profile.d/python314-ca.sh`, `.../sitecustomize.py`)
   - Sets `SSL_CERT_FILE` to the packaged certifi CA bundle by default.
   - Makes default Python HTTPS verification work without manual SSL context setup.
@@ -50,6 +52,7 @@ Output package path:
 - `packages/com.davgz.python314_3.14.3-4_iphoneos-arm.deb`
 - `packages/com.davgz.python314_3.14.3-5_iphoneos-arm.deb`
 - `packages/com.davgz.python314_3.14.3-6_iphoneos-arm.deb`
+- `packages/com.davgz.python314_3.14.3-7_iphoneos-arm.deb`
 
 ## Install on device with Theos
 
@@ -89,6 +92,8 @@ import ctypes, lzma, readline, curses
 print("optional modules ok")
 PY
 /usr/local/python3.14/bin/python3.14 -m test -h; echo $?
+/usr/local/python3.14/bin/python3.14 -m test test_readline; echo $?
+/usr/local/python3.14/bin/python3.14 -m test test_curses; echo $?
 ```
 
 ## Source code for others

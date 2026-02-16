@@ -20,6 +20,7 @@ Current Python patchset includes:
 
 - `_scproxy` stub for iOS compatibility (pip/urllib startup path)
 - `sitecustomize.py` CA-bundle wiring for default HTTPS verification
+- iOS non-interactive TTY skips for `Lib/test/test_readline.py` and `Lib/test/test_curses.py`
 
 ## Recreate patched CPython source
 
@@ -56,6 +57,9 @@ This builds and stages:
 - `layout/usr/local/python3.14/lib/python3.14/lib-dynload/readline.cpython-314-arm64-iphoneos.so`
 - `layout/usr/local/python3.14/lib/python3.14/lib-dynload/_curses.cpython-314-arm64-iphoneos.so`
 - `layout/usr/local/python3.14/lib/python3.14/lib-dynload/_curses_panel.cpython-314-arm64-iphoneos.so`
+
+`_ctypes` is compiled with Apple libffi closure/cif feature flags so callback
+paths use `ffi_closure_alloc`/`ffi_prep_closure_loc`/`ffi_prep_cif_var` on iOS.
 
 ## Stage Lib/test for regrtest support
 

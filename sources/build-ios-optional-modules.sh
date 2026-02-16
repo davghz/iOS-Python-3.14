@@ -151,16 +151,23 @@ BASE_CFLAGS=(
   -I"$PY_SRC/Include" -I"$IOS_SDK/usr/include" -I"$IOS_EXTRA/include"
   -I"$IOS_EXTRA/include/ncursesw"
 )
+CTYPES_CFLAGS=(
+  -DUSING_MALLOC_CLOSURE_DOT_C=1
+  -DUSING_APPLE_OS_LIBFFI=1
+  -DHAVE_FFI_CLOSURE_ALLOC=1
+  -DHAVE_FFI_PREP_CLOSURE_LOC=1
+  -DHAVE_FFI_PREP_CIF_VAR=1
+)
 
 cd "$PY_BUILD"
 
 # _ctypes
-/usr/bin/clang "${COMMON_FLAGS[@]}" "${BASE_CFLAGS[@]}" -c "$PY_SRC/Modules/_ctypes/_ctypes.c" -o Modules/_ctypes__ctypes.o
-/usr/bin/clang "${COMMON_FLAGS[@]}" "${BASE_CFLAGS[@]}" -c "$PY_SRC/Modules/_ctypes/callbacks.c" -o Modules/_ctypes__callbacks.o
-/usr/bin/clang "${COMMON_FLAGS[@]}" "${BASE_CFLAGS[@]}" -c "$PY_SRC/Modules/_ctypes/callproc.c" -o Modules/_ctypes__callproc.o
-/usr/bin/clang "${COMMON_FLAGS[@]}" "${BASE_CFLAGS[@]}" -c "$PY_SRC/Modules/_ctypes/stgdict.c" -o Modules/_ctypes__stgdict.o
-/usr/bin/clang "${COMMON_FLAGS[@]}" "${BASE_CFLAGS[@]}" -c "$PY_SRC/Modules/_ctypes/cfield.c" -o Modules/_ctypes__cfield.o
-/usr/bin/clang "${COMMON_FLAGS[@]}" "${BASE_CFLAGS[@]}" -c "$PY_SRC/Modules/_ctypes/malloc_closure.c" -o Modules/_ctypes__malloc_closure.o
+/usr/bin/clang "${COMMON_FLAGS[@]}" "${BASE_CFLAGS[@]}" "${CTYPES_CFLAGS[@]}" -c "$PY_SRC/Modules/_ctypes/_ctypes.c" -o Modules/_ctypes__ctypes.o
+/usr/bin/clang "${COMMON_FLAGS[@]}" "${BASE_CFLAGS[@]}" "${CTYPES_CFLAGS[@]}" -c "$PY_SRC/Modules/_ctypes/callbacks.c" -o Modules/_ctypes__callbacks.o
+/usr/bin/clang "${COMMON_FLAGS[@]}" "${BASE_CFLAGS[@]}" "${CTYPES_CFLAGS[@]}" -c "$PY_SRC/Modules/_ctypes/callproc.c" -o Modules/_ctypes__callproc.o
+/usr/bin/clang "${COMMON_FLAGS[@]}" "${BASE_CFLAGS[@]}" "${CTYPES_CFLAGS[@]}" -c "$PY_SRC/Modules/_ctypes/stgdict.c" -o Modules/_ctypes__stgdict.o
+/usr/bin/clang "${COMMON_FLAGS[@]}" "${BASE_CFLAGS[@]}" "${CTYPES_CFLAGS[@]}" -c "$PY_SRC/Modules/_ctypes/cfield.c" -o Modules/_ctypes__cfield.o
+/usr/bin/clang "${COMMON_FLAGS[@]}" "${BASE_CFLAGS[@]}" "${CTYPES_CFLAGS[@]}" -c "$PY_SRC/Modules/_ctypes/malloc_closure.c" -o Modules/_ctypes__malloc_closure.o
 /usr/bin/clang "${COMMON_FLAGS[@]}" -bundle -bundle_loader "$PY_BUILD/python.exe" \
   Modules/_ctypes__ctypes.o Modules/_ctypes__callbacks.o Modules/_ctypes__callproc.o \
   Modules/_ctypes__stgdict.o Modules/_ctypes__cfield.o Modules/_ctypes__malloc_closure.o \
