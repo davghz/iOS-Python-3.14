@@ -22,6 +22,7 @@ Current Python patchset includes:
 - `sitecustomize.py` CA-bundle wiring for default HTTPS verification
 - iPhoneOS non-interactive TTY skips for `Lib/test/test_readline.py` and `Lib/test/test_curses.py`
 - iPhoneOS skips for unstable ctypes callback tests in `Lib/test/test_ctypes`
+- iPhoneOS runtime guard in `Modules/_ctypes/callbacks.c` to disable crash-prone callbacks
 
 ## Recreate patched CPython source
 
