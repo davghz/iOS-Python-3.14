@@ -1,0 +1,29 @@
+#!/bin/sh
+set -e
+
+PYROOT=/usr/local/python3.14
+
+if [ ! -x /usr/bin/ldid ]; then
+    exit 0
+fi
+
+sign_if_macho() {
+    path="$1"
+    if [ ! -f "$path" ]; then
+        return 0
+    fi
+
+    if /usr/bin/file "$path" 2>/dev/null | /usr/bin/grep -q 'Mach-O'; then
+        /usr/bin/ldid -S "$path" || true
+    fi
+}
+
+for bin in "$PYROOT"/bin/*; do
+    sign_if_macho "$bin"
+done
+
+for mod in "$PYROOT"/lib/python3.14/lib-dynload"/"*.so; do
+    sign_if_macho "$mod"
+done
+
+exit 0
