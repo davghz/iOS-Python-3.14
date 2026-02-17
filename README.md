@@ -34,6 +34,9 @@ This repo builds a Theos `.deb` for CPython 3.14 on jailbroken iOS.
 - Global CA bundle wiring (`overlay/etc/profile.d/python314-ca.sh`, `.../sitecustomize.py`)
   - Sets `SSL_CERT_FILE` to the packaged certifi CA bundle by default.
   - Makes default Python HTTPS verification work without manual SSL context setup.
+- iOS SystemLog stdio override for CLI shells (`.../sitecustomize.py`)
+  - Detects `_apple_support.SystemLog` stdout/stderr and restores fd-backed streams.
+  - Makes `python3.14 ...` and `pip ...` output visible over SSH/newterm2.
 - `postinst` ad-hoc signing (`overlay/DEBIAN/postinst`)
   - Signs Mach-O files in Python `bin/` and `lib-dynload/` using `ldid -S` after install.
   - Prevents immediate process kills from unsigned binaries/modules.
@@ -59,6 +62,7 @@ Output package path:
 - `packages/com.davgz.python314_3.14.3-8_iphoneos-arm.deb`
 - `packages/com.davgz.python314_3.14.3-9_iphoneos-arm.deb`
 - `packages/com.davgz.python314_3.14.3-10_iphoneos-arm.deb`
+- `packages/com.davgz.python314_3.14.3-11_iphoneos-arm.deb`
 
 ## Install on device with Theos
 
@@ -78,15 +82,12 @@ PATH="$WRAPDIR:$PATH" make install THEOS_DEVICE_IP=172.20.10.9 THEOS_DEVICE_USER
 
 ## Verification notes
 
-On iOS, Python is configured with `use_system_logger` by default, so CLI output
-is redirected to Apple system logging instead of your SSH terminal.
-
-Use exit codes (or file-based checks) for verification:
+After installing this patch level, normal CLI output is visible in SSH/newterm2:
 
 ```sh
-/usr/local/python3.14/bin/python3.14 -V; echo $?
-/usr/local/python3.14/bin/pip --version; echo $?
-/usr/local/python3.14/bin/python3.14 -c "import pip; open('/tmp/pipver','w').write(pip.__version__)" && cat /tmp/pipver
+/usr/local/python3.14/bin/python3.14 -V
+/usr/local/python3.14/bin/pip --version
+/usr/local/python3.14/bin/python3.14 -c "import pip; print(pip.__version__)"
 ```
 
 Expected after install: commands exit `0`, including:
