@@ -1,8 +1,10 @@
-Package: com.davgz.python314
-Name: Python 3.14 for iOS
-Version: 3.14.3-11
+Package: com.davgz.python314-unsafe-callbacks
+Name: Python 3.14 for iOS (Unsafe Callbacks)
+Version: 3.14.3-11+unsafe1
 Architecture: iphoneos-arm
 Depends: firmware (>= 13.0), libssl1.1.1
+Conflicts: com.davgz.python314
+Replaces: com.davgz.python314
 Maintainer: davgz
 Section: Languages
-Description: CPython 3.14.3 with pip 26.0.1 for jailbroken iOS devices (with ssl/ctypes/lzma/readline/curses modules).
+Description: CPython 3.14.3 with pip 26.0.1 for jailbroken iOS devices (UNSAFE ctypes callback variant; may crash).

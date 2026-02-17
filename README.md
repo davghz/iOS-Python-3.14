@@ -2,6 +2,12 @@
 
 This repo builds a Theos `.deb` for CPython 3.14 on jailbroken iOS.
 
+## Branch variants
+
+- `main`: stable default build with iPhoneOS `_ctypes` callbacks blocked for safety.
+- `unsafe-callbacks`: experimental build that re-enables iPhoneOS `_ctypes` callbacks.
+  Use only for testing; callback paths may still crash on some devices/runtimes.
+
 ## What this package includes
 
 - CPython `3.14.3`
@@ -31,6 +37,11 @@ This repo builds a Theos `.deb` for CPython 3.14 on jailbroken iOS.
   - Includes iPhoneOS skips for unstable ctypes callback tests that can bus-error with platform libffi.
 - iPhoneOS ctypes callback hardening
   - `_ctypes` callback creation is blocked on iPhoneOS with `NotImplementedError` to avoid callback trampoline bus-errors.
+- Unsafe callbacks variant (`unsafe-callbacks` branch)
+  - Adds `sources/patches/python3.14/0007-ios-unsafe-enable-ctypes-callbacks.patch`
+    to re-enable callback creation on iPhoneOS.
+  - Package id: `com.davgz.python314-unsafe-callbacks`.
+  - Known issue: callback invocation currently still SIGBUS-es on iPhone10,3 / iOS 13.2.3.
 - Global CA bundle wiring (`overlay/etc/profile.d/python314-ca.sh`, `.../sitecustomize.py`)
   - Sets `SSL_CERT_FILE` to the packaged certifi CA bundle by default.
   - Makes default Python HTTPS verification work without manual SSL context setup.
@@ -52,6 +63,25 @@ TARGET_PASS=alpine ./sources/build-ios-optional-modules.sh
 make package FINALPACKAGE=1
 ```
 
+Unsafe callbacks branch/package flow:
+
+```sh
+./sources/apply-python-patches.sh
+TARGET_IP=10.0.0.9 TARGET_PASS=alpine PY_SRC="$PWD/sources/work/Python-3.14.3" ./sources/build-ios-optional-modules.sh
+./sources/build-unsafe-callbacks-deb.sh
+```
+
+Quick callback probe for unsafe builds:
+
+```sh
+/usr/bin/python3.14 - <<'PY'
+import ctypes
+CB = ctypes.CFUNCTYPE(ctypes.c_int, ctypes.c_int)
+f = CB(lambda x: x + 1)
+print(f(41))
+PY
+```
+
 Output package path:
 
 - `packages/com.davgz.python314_3.14.3-3_iphoneos-arm.deb`
@@ -63,6 +93,7 @@ Output package path:
 - `packages/com.davgz.python314_3.14.3-9_iphoneos-arm.deb`
 - `packages/com.davgz.python314_3.14.3-10_iphoneos-arm.deb`
 - `packages/com.davgz.python314_3.14.3-11_iphoneos-arm.deb`
+- `packages/com.davgz.python314-unsafe-callbacks_3.14.3-11+unsafe1_iphoneos-arm.deb` (unsafe branch)
 
 ## Install on device with Theos
 

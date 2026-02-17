@@ -351,12 +351,6 @@ CThunkObject *_ctypes_alloc_callback(ctypes_state *st,
     Py_ssize_t nargs, i;
     ffi_abi cc;
 
-#if defined(__APPLE__) && defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE && !TARGET_OS_SIMULATOR
-    PyErr_SetString(PyExc_NotImplementedError,
-                    "ctypes callbacks are not supported on iPhoneOS in this build");
-    return NULL;
-#endif
-
     assert(PyTuple_Check(converters));
     nargs = PyTuple_GET_SIZE(converters);
     p = CThunkObject_new(st, nargs);

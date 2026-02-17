@@ -9,6 +9,7 @@ packages/*
 !packages/com.davgz.python314_3.14.3-8_iphoneos-arm.deb
 !packages/com.davgz.python314_3.14.3-9_iphoneos-arm.deb
 !packages/com.davgz.python314_3.14.3-10_iphoneos-arm.deb
+!packages/com.davgz.python314-unsafe-callbacks_3.14.3-11+unsafe1_iphoneos-arm.deb
 !packages/SHA256SUMS
 sources/upstream/*
 sources/work/

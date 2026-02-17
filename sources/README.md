@@ -10,6 +10,7 @@ This directory tracks the Python source changes used for the iOS build.
 - `apply-python-patches.sh`: recreates a patched CPython tree
 - `build-ios-openssl-modules.sh`: builds `_ssl` and `_hashlib` for iOS
 - `build-ios-optional-modules.sh`: builds `_ctypes`, `_lzma`, `readline`, `_curses`, `_curses_panel` for iOS
+- `build-unsafe-callbacks-deb.sh`: repacks a full base `.deb` into unsafe callback variant
 - `stage-libtest.sh`: stages `Lib/test` into package layout
 - `SHA256SUMS`: checksums for the fetched upstream archives
 
@@ -24,6 +25,8 @@ Current Python patchset includes:
 - iPhoneOS non-interactive TTY skips for `Lib/test/test_readline.py` and `Lib/test/test_curses.py`
 - iPhoneOS skips for unstable ctypes callback tests in `Lib/test/test_ctypes`
 - iPhoneOS runtime guard in `Modules/_ctypes/callbacks.c` to disable crash-prone callbacks
+- optional unsafe patch (`0007`) to re-enable `_ctypes` callbacks on iPhoneOS for experimentation
+  - current observed behavior on iPhone10,3 / iOS 13.2.3: callback invocation still SIGBUS-es
 
 ## Recreate patched CPython source
 
