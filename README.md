@@ -2,6 +2,24 @@
 
 For **rootless iOS 15 or later**, use the latest native [Python 3.15.2 and pip 26.3 package](sources/PYTHON315-ROOTLESS.md). The previous [Python 3.14 rootless package](sources/ROOTLESS.md) remains available.
 
+
+<!-- latest-rootless-download -->
+## Latest download
+
+| Release | Rootless package | SHA256 |
+| --- | --- | --- |
+| [Python 3.15.2 + pip 26.3](https://github.com/davghz/iOS-Python-3.14/releases/tag/v3.15.2-1-rootless) | [Download .deb](https://github.com/davghz/iOS-Python-3.14/releases/download/v3.15.2-1-rootless/com.davgz.python315_3.15.2-1%2Brootless_iphoneos-arm64.deb) | [Checksum](https://github.com/davghz/iOS-Python-3.14/releases/download/v3.15.2-1-rootless/com.davgz.python315_3.15.2-1%2Brootless_iphoneos-arm64.deb.sha256) |
+
+Requires **jailbroken rootless iOS 15 or later** (`iphoneos-arm64`).
+Install from the download folder with APT to resolve dependencies:
+
+```sh
+sudo apt install ./com.davgz.python315_3.15.2-1+rootless_iphoneos-arm64.deb
+```
+
+Includes native SSL, decimal, zstd, SQLite, subprocess support, and pip in new virtual environments.
+<!-- /latest-rootless-download -->
+
 ## Legacy Python 3.14 workflow
 
 The historical Theos package below provides CPython 3.14 on jailbroken iOS.
