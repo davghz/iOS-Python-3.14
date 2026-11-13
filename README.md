@@ -1,6 +1,6 @@
 # iOS Python 3.14 Package
 
-For **rootless iOS 15 or later**, use the [rootless package and instructions](sources/ROOTLESS.md).
+For **rootless iOS 15 or later**, use the latest native [Python 3.15.2 and pip 26.3 package](sources/PYTHON315-ROOTLESS.md). The previous [Python 3.14 rootless package](sources/ROOTLESS.md) remains available.
 
 This repo builds a Theos `.deb` for CPython 3.14 on jailbroken iOS.
 
