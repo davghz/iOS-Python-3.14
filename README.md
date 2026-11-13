@@ -1,4 +1,4 @@
-# iOS Python 3.14 Package
+# Python for iOS
 
 This repo builds a Theos `.deb` for CPython 3.14 on jailbroken iOS.
 
